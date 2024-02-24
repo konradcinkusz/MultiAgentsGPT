@@ -2,8 +2,8 @@ import os
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from helpers.book_agent_description import BookAgentDescription
-from helpers.observer_interaction import ObserverInteraction
+from interactions.sci_fiction_book_debate_interactions.book_agent_description import BookAgentDescription
+from interactions.sci_fiction_book_debate_interactions.observer_interaction import ObserverInteraction
 
 from typing import Callable, List
 

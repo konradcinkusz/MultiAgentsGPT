@@ -1,4 +1,4 @@
-from helpers.agent_interaction import AgentInteraction
+from agent_interaction import AgentInteraction
 
 from langchain.schema import HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI
