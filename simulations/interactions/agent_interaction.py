@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 class AgentInteraction(ABC):
     @abstractmethod
-    def generate_description(self, name):
+    def generate_description(self, *args):
         pass
 
     @abstractmethod

@@ -1,9 +1,10 @@
 import os
 import sys
+
+from simulators.dialogue_simulator import DialogueSimulator
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from agents.dialogue_agent_bidding import BiddingDialogueAgent
-from agents.dialogue_simulator import DialogueSimulator
 from simulations.interactions.presidental_debate.bid_output_parser import BidOutputParser
 from simulations.interactions.presidental_debate.presidental_debate_description import PresidentialDebateDescription
 
@@ -103,6 +104,7 @@ n = 0
 simulator = DialogueSimulator(agents=members, selection_function=debate_member_interactions.select_next_speaker)
 simulator.reset()
 simulator.inject("Debate Moderator", specified_topic)
+
 print(f"(Debate Moderator): {specified_topic}")
 print("\n")
 # ANSI color codes
