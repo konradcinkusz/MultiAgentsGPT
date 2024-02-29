@@ -10,7 +10,13 @@ class DialogueSimulator:
         self.agents = agents
         self._step = 0
         self.select_next_speaker = selection_function
+        self.assign_colors()
 
+    def assign_colors(self):
+        colors = ['\033[31m', '\033[32m', '\033[33m', '\033[34m', '\033[35m', '\033[36m']
+        for i, agent in enumerate(self.agents):
+            agent.color = colors[i % len(colors)]
+            
     def reset(self):
         for agent in self.agents:
             agent.reset()

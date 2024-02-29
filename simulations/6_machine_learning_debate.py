@@ -19,15 +19,17 @@ from agents.dialogue_agent import DialogueAgent
 from agents.dialogue_agent_director import DirectorDialogueAgent
 from simulations.interactions.television_debate.television_debate_description import TelevisionDebateDescription
 
-topic = "The New Workout Trend: Competitive Sitting - How Laziness Became the Next Fitness Craze"
-director_name = "Jon Stewart"
+from langchain_community.document_loaders import PyPDFLoader
+topic = "Debate about basics of ML"
+director_name = "Andrew NG"
 
 agent_summaries = OrderedDict(
     {
-        "Jon Stewart": ("Host of the Daily Show", "New York"),
-        "Samantha Bee": ("Hollywood Correspondent", "Los Angeles"),
-        "Aasif Mandvi": ("CIA Correspondent", "Washington D.C."),
-        "Ronny Chieng": ("Average American Correspondent", "Cleveland, Ohio"),
+        "Andrew NG": ("Host of the Daily Show", "New York"),
+        "Geoffrey Hinton": ("Pioneer in Neural Networks and Deep Learning", "Toronto"),
+        "Yann LeCun": ("Chief AI Scientist at a major social media company", "New York"),
+        "Fei-Fei Li": ("Leading expert in computer vision and AI ethics", "Stanford"),
+        "Demis Hassabis": ("Founder of an AI research company focused on AGI", "London"),
     }
 )
 
@@ -98,6 +100,20 @@ director = DirectorDialogueAgent(
     speakers=[name for name in agent_summaries if name != director_name],
     stopping_probability=0.2,
 )
+base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+assets_dir = os.path.join(base_dir, 'assets')
+
+# https://github.com/ksm26/LangChain-Chat-with-Your-Data/blob/main/L1-Document_loading.ipynb
+# https://see.stanford.edu/materials/aimlcs229/transcripts/MachineLearning-Lecture01.pdf
+# https://see.stanford.edu/materials/aimlcs229/transcripts/MachineLearning-Lecture02.pdf
+loaders = [
+    PyPDFLoader(os.path.join(assets_dir, "MachineLearning-Lecture01.pdf")),
+    PyPDFLoader(os.path.join(assets_dir, "MachineLearning-Lecture01.pdf")),
+    PyPDFLoader(os.path.join(assets_dir, "MachineLearning-Lecture02.pdf")),
+    PyPDFLoader(os.path.join(assets_dir, "MachineLearning-Lecture03.pdf"))
+]
+director.persist_directory = 'docs/chroma/'
+director.create_vector_store(loaders)
 
 agents = [director]
 for name, system_message in zip(
@@ -110,6 +126,7 @@ for name, system_message in zip(
             model=ChatOpenAI(temperature=0.2),
         )
     )
+
 # Replace the main loop with the new wrapper class
 debate_simulator_wrapper = DebateSimulatorWrapper(
     agents=agents,
@@ -118,29 +135,3 @@ debate_simulator_wrapper = DebateSimulatorWrapper(
 )
 
 debate_simulator_wrapper.run_simulation(specified_topic)
-
-# simulator = DialogueSimulator(
-#     agents=agents,
-#     selection_function=functools.partial(select_next_speaker, director=director),
-# )
-# simulator.reset()
-# simulator.inject("Audience member", specified_topic)
-# print(f"(Audience member): {specified_topic}")
-# print("\n")
-
-# # ANSI color codes
-# even_color = '\033[94m' # Blue for even iterations
-# odd_color = '\033[92m' # Green for odd iterations
-
-# n=0
-
-# while True:
-#     # Choose the color based on whether n is even or odd
-#     color = even_color if n % 2 == 0 else odd_color
-
-#     name, message = simulator.step()
-#     # Print the message in the selected color and reset color at the end
-#     print(f"{color}({name}): {message}\033[0m")
-#     print("\n")
-#     if director.stop or n > 10:
-#         break

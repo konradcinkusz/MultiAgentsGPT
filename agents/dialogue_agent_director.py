@@ -126,6 +126,7 @@ Prompt the next speaker to speak with an insightful question.
         return self.chosen_speaker_id
 
     def send(self) -> str:
+        self._apply_vector_store_to_message_history()
         """
         Applies the chatmodel to the message history
         and returns the message string

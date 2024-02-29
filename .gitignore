@@ -6,6 +6,10 @@ __pycache__/
 # C extensions
 *.so
 
+*.bin
+*.pickle
+*.sqlite3
+
 # Distribution / packaging
 .Python
 build/
@@ -146,3 +150,7 @@ cython_debug/
 
 # Web files
 *.html
+assets/MachineLearning-Lecture01.pdf
+assets/MachineLearning-Lecture02.pdf
+assets/MachineLearning-Lecture03.pdf
+assets/MachineLearning-Lecture04.pdf
